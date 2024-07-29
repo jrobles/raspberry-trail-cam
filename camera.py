@@ -15,6 +15,7 @@ camera.configure(camera_config)
 video_config = camera.create_video_configuration()
 camera.configure(video_config)
 pir = MotionSensor(4)
+capture_dir = '/opt/raspberry-trail-cam/capture/'
 
 def send_notification():
     requests.post('https://api.mynotifier.app',{"apiKey":os.environ['MYNOTIFIER_API_KEY'],"message": "test","description":"test message","type":"info"})
@@ -28,13 +29,13 @@ def capture_snapshot_and_video():
     #send_notification()
 
     # Capture a snapshot
-    snapshot_filename = '/opt/trail_cam/capture/'+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.jpg'
+    snapshot_filename = capture_dir+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.jpg'
     camera.capture_file(snapshot_filename)
     print(f"Snapshot saved as {snapshot_filename}")
     
     # Start recording video
     encoder = H264Encoder(10000000)
-    video_filename = '/opt/trail_cam/capture/'+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.h264'
+    video_filename = capture_dir+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.h264'
     camera.start_recording(encoder,video_filename)
     print(f"Recording started: {video_filename}")
     
